@@ -1,6 +1,6 @@
-import 'package:category_app2/models/category_model.dart';
-import 'package:category_app2/models/figher_model.dart';
 import 'package:flutter/material.dart';
+
+import '../models/models.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -32,6 +32,28 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: (int index) {
+          print('Bottom navigation bar tapped: $index');
+
+          final routes = [
+            '/home',
+            '/fight',
+            '/heroroster',
+          ];
+
+          Navigator.pushNamed(context, routes[index]);
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.sports_mma),
+            label: 'Fight',
+          ),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Fighters'),
+        ],
+      ),
       body: Center(
         child: Column(
           children: [
@@ -52,8 +74,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 320,
+                SizedBox(
+                  height: 200,
                   child: ListView.separated(
                     itemCount: fighters.length,
                     scrollDirection: Axis.vertical,
@@ -65,58 +87,32 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return Container(
                         width: 100,
-                        child: Container(
-                          color: {
-                            'Light': Colors.yellow[100],
-                            'Dark': Color.fromARGB(255, 103, 77, 134),
-                            'Fire': Colors.orange[100],
-                            'Water': Colors.blue[100],
-                            'Earth': Colors.brown[100],
-                          }[fighters[index].category],
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                width: 50,
-                                height: 50,
-                                child: Image.asset(
-                                  fighters[index].image,
-                                  width: 50,
-                                  height: 5,
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                fighters[index].name,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Poppins',
-                                ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Row(
-                                children: fighters[index]
-                                    .toJson()
-                                    .entries
-                                    .map<Widget>((entry) {
-                                  // Exclude non-stat properties
-                                  if (entry.key == 'name' ||
-                                      entry.key == 'category' ||
-                                      entry.key == 'image') {
-                                    return Container();
-                                  }
-
-                                  return _statDisplay(index, entry.key);
-                                }).toList(),
-                              ),
-                            ],
+                        color: {
+                          'Light': Colors.yellow[100],
+                          'Dark': Color.fromARGB(255, 103, 77, 134),
+                          'Fire': Colors.orange[100],
+                          'Water': Colors.blue[100],
+                          'Earth': Colors.brown[100],
+                        }[fighters[index].category],
+                        child: ListTile(
+                          trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                          leading: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Image.asset(
+                              fighters[index].image,
+                              width: 50,
+                              height: 5,
+                            ),
+                          ),
+                          title: Text(
+                            fighters[index].name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Poppins',
+                            ),
                           ),
                         ),
                       );
@@ -128,6 +124,24 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Row _statRow(int index) {
+    return Row(
+      children: fighters[index].toJson().entries.map<Widget>((entry) {
+        // Exclude non-stat properties
+        if (entry.key == 'name' ||
+            entry.key == 'category' ||
+            entry.key == 'image' ||
+            entry.key == 'crit' ||
+            entry.key == 'dodge' ||
+            entry.key == 'defense') {
+          return Container();
+        }
+
+        return _statDisplay(index, entry.key);
+      }).toList(),
     );
   }
 
@@ -148,10 +162,10 @@ class _HomePageState extends State<HomePage> {
         ),
         const Text(
           // ignore: unnecessary_string_interpolations
-          '$stat',
+          'Strength',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 10,
+            fontSize: 5,
             fontWeight: FontWeight.bold,
             fontFamily: 'Poppins',
           ),
@@ -287,14 +301,8 @@ class _HomePageState extends State<HomePage> {
               fontSize: 30,
               fontWeight: FontWeight.bold,
               fontFamily: 'Poppins'),
-          'Fighters'),
+          'Menu'),
       centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          print('Back button clicked');
-        },
-      ),
       actions: [
         IconButton(
           icon: const Icon(Icons.search),
