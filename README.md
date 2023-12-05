@@ -1,6 +1,7 @@
 # flutter-fighterapp
 A basic Hero-Fighter app for learning flutter. In this app, you can collect heroes with different stats and allignments who can fight each other.
 
+![Screenshot](docs/example1.jpeg)
 
 ## Getting Started
 
