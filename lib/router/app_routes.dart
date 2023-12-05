@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../pages/pages.dart';
 
 class AppRoutes {
-  static const initialRoute = '/home';
+  static const initialRoute = '/herodetail';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     '/heroroster': (BuildContext context) => const HeroRosterScreen(),
     '/home': (BuildContext context) => HomePage(),
+    '/herodetail': (BuildContext context) => const HeroDetailScreen(),
   };
 
   static Route<dynamic>? Function(RouteSettings)? onGenerateRoute =

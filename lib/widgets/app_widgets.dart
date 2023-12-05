@@ -1,0 +1,1 @@
+export "fightercard_widget.dart";
