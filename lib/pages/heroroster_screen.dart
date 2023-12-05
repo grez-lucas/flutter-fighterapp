@@ -34,13 +34,12 @@ class _HeroRosterScreenState extends State<HeroRosterScreen> {
         child: GridView.builder(
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              return FighterCard(fighters: fighters, index: index);
+              return FighterCard(fighter: fighters[index]);
             },
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 0.8, crossAxisCount: 2),
+                childAspectRatio: 0.7, crossAxisCount: 2),
             itemCount: fighters.length),
       ),
     );
   }
 }
-
