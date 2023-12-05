@@ -17,6 +17,7 @@ class FighterModel {
 
   static List<CategoryModel> categories = CategoryModel.getCategories();
   static List<StatModel> statsList = StatModel.getStats();
+  
   FighterModel(
       {required this.name,
       required this.category,
@@ -31,6 +32,15 @@ class FighterModel {
         'description': description,
         'stats': stats,
       };
+
+  List<StatModel> getStats() {
+    return statsList;
+  }
+
+  bool isAlive() {
+    return stats[statsList.firstWhere((element) => element.name == 'Health')]! >
+        0;
+  }
 
   static List<FighterModel> getFighters() {
     List<FighterModel> fighters = [];
