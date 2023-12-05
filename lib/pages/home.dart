@@ -87,14 +87,13 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return Container(
                         width: 100,
-                        color: {
-                          'Light': Colors.yellow[100],
-                          'Dark': Color.fromARGB(255, 103, 77, 134),
-                          'Fire': Colors.orange[100],
-                          'Water': Colors.blue[100],
-                          'Earth': Colors.brown[100],
-                        }[fighters[index].category],
+                        color:
+                            fighters[index].category.bgColor.withOpacity(0.75),
                         child: ListTile(
+                          onTap: () {
+                            Navigator.pushNamed(context, '/herodetail',
+                                arguments: fighters[index]);
+                          },
                           trailing: const Icon(Icons.arrow_forward_ios_rounded),
                           leading: SizedBox(
                             width: 50,
@@ -124,53 +123,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-
-  Row _statRow(int index) {
-    return Row(
-      children: fighters[index].toJson().entries.map<Widget>((entry) {
-        // Exclude non-stat properties
-        if (entry.key == 'name' ||
-            entry.key == 'category' ||
-            entry.key == 'image' ||
-            entry.key == 'crit' ||
-            entry.key == 'dodge' ||
-            entry.key == 'defense') {
-          return Container();
-        }
-
-        return _statDisplay(index, entry.key);
-      }).toList(),
-    );
-  }
-
-  Column _statDisplay(int index, String stat) {
-    Map<String, dynamic> fighterMap = fighters[index].toJson();
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          fighterMap[stat].toString(),
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
-          ),
-        ),
-        const Text(
-          // ignore: unnecessary_string_interpolations
-          'Strength',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 5,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Poppins',
-          ),
-        ),
-      ],
     );
   }
 
