@@ -15,8 +15,7 @@ class Fight {
     FighterModel currentDefender;
 
     // First attacker is the one with the highest speed
-    if (fighter1.stats.speed.value >
-        fighter2.stats.speed.value) {
+    if (fighter1.stats.speed.value > fighter2.stats.speed.value) {
       log.add('${fighter1.name} attacks first!');
       currentAttacker = fighter1;
       currentDefender = fighter2;
@@ -27,6 +26,13 @@ class Fight {
     }
 
     while (fighter1.isAlive() && fighter2.isAlive()) {
+
+      if (turnNumber > 30) {
+        log.add(
+            'The fight has reached the maximum number of turns. It is a draw.');
+        break;
+      }
+
       turn = Turn(
         turnNumber: turnNumber,
         attacker: currentAttacker,
@@ -46,6 +52,10 @@ class Fight {
         break;
       }
 
+
+      // Switch attacker and defender
+      currentAttacker = currentDefender;
+      currentDefender = currentAttacker == fighter1 ? fighter2 : fighter1;
       turnNumber++;
     }
   }

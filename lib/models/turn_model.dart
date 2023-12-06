@@ -29,16 +29,14 @@ class Turn {
     StatModel defenseStat =
         StatModel.getStats().firstWhere((stat) => stat.name == 'Defense');
 
-
     final crit = attacker.stats.crit.value / 100;
     final hasCrit = Random().nextDouble() <= crit;
     int damage = 0;
 
-    final hasHit = Random().nextDouble() <=
-        (defender.stats.dodge.value / 100) - (attacker.stats.speed.value / 100);
+    final hasHit = Random().nextDouble() <= (defender.stats.dodge.value / 100);
 
     if (!hasHit) {
-      log.add('${attacker.name} tries to attack but missed!');
+      log.add('${attacker.name} tries to attack but ${defender.name} dodges!');
       return;
     }
 
@@ -46,8 +44,10 @@ class Turn {
       damage = attacker.stats.strength.value * attacker.stats.speed.value * 2 -
           defender.stats.defense.value;
     } else {
-      damage = attacker.stats.strength.value * attacker.stats.speed.value -
-          defender.stats.defense.value;
+      damage = ((attacker.stats.strength.value * attacker.stats.speed.value -
+                  defender.stats.defense.value) /
+              100)
+          .floor();
     }
     if (damage < 0) {
       log.add('${attacker.name} tries to attack but ${defender.name} blocks!');
