@@ -29,15 +29,13 @@ class Turn {
     StatModel defenseStat =
         StatModel.getStats().firstWhere((stat) => stat.name == 'Defense');
 
-    Map<StatModel, int> attackerStats = attacker.stats;
-    Map<StatModel, int> defenderStats = defender.stats;
 
-    final crit = attackerStats[critStat]! / 100;
+    final crit = attacker.stats.crit.value / 100;
     final hasCrit = Random().nextDouble() <= crit;
     int damage = 0;
 
     final hasHit = Random().nextDouble() <=
-        (defenderStats[dodgeStat]! / 100) - (attackerStats[speedStat]! / 100);
+        (defender.stats.dodge.value / 100) - (attacker.stats.speed.value / 100);
 
     if (!hasHit) {
       log.add('${attacker.name} tries to attack but missed!');
@@ -45,18 +43,18 @@ class Turn {
     }
 
     if (hasCrit) {
-      damage = attackerStats[strengthStat]! * attackerStats[speedStat]! * 2 -
-          defenderStats[defenseStat]!;
+      damage = attacker.stats.strength.value * attacker.stats.speed.value * 2 -
+          defender.stats.defense.value;
     } else {
-      damage = attackerStats[strengthStat]! * attackerStats[speedStat]! -
-          defenderStats[defenseStat]!;
+      damage = attacker.stats.strength.value * attacker.stats.speed.value -
+          defender.stats.defense.value;
     }
     if (damage < 0) {
       log.add('${attacker.name} tries to attack but ${defender.name} blocks!');
       return;
     }
 
-    defenderStats[healthStat] = defenderStats[healthStat]! - damage;
+    defender.stats.health.value = defender.stats.health.value - damage;
     log.add(
         '${hasCrit ? 'CRITICAL! ' : ''}${attacker.name} attacks ${defender.name} for $damage damage!');
     return;

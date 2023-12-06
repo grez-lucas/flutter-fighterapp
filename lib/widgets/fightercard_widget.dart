@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 
-// TODO: Refactor this widget to use new models
 class FighterCard extends StatelessWidget {
   const FighterCard({
     super.key,
@@ -51,10 +50,10 @@ class FighterCard extends StatelessWidget {
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                ...fighter.stats.entries
+                ...fighter.getStatsList()
                     .map((entry) {
                       return [
-                        entry.key.icon,
+                        entry.statModel.icon,
                         Text(
                           entry.value.toString(),
                           style: const TextStyle(

@@ -15,10 +15,8 @@ class Fight {
     FighterModel currentDefender;
 
     // First attacker is the one with the highest speed
-    if (fighter1.stats[
-            StatModel.getStats().firstWhere((stat) => stat.name == 'Speed')]! >
-        fighter2.stats[
-            StatModel.getStats().firstWhere((stat) => stat.name == 'Speed')]!) {
+    if (fighter1.stats.speed.value >
+        fighter2.stats.speed.value) {
       log.add('${fighter1.name} attacks first!');
       currentAttacker = fighter1;
       currentDefender = fighter2;

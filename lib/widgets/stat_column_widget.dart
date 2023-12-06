@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 
 import '../models/fighter_model.dart';
@@ -13,27 +15,29 @@ class StatColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-        itemCount: fighter.stats.length,
+        itemCount: fighter.getStatsList().length,
         shrinkWrap: true,
         separatorBuilder: (_, __) {
           return const SizedBox(height: 10);
         },
-        itemBuilder: (context, index2) {
+        itemBuilder: (context, index) {
           return Card(
             shadowColor: Colors.grey,
             elevation: 2,
-            child: _statTile(index2),
+            child: _statTile(index),
           );
         });
   }
 
-  ListTile _statTile(int index2) {
+  ListTile _statTile(int index) {
+    List<FighterStat> statsList = fighter.getStatsList();
+
     return ListTile(
-        leading: fighter.stats.keys.elementAt(index2).icon,
-        iconColor: fighter.stats.keys.elementAt(index2).color,
+        leading: statsList[index].statModel.icon,
+        iconColor: statsList[index].statModel.color,
         tileColor: fighter.category.bgColor,
         subtitle: Text(
-          fighter.stats.keys.elementAt(index2).name,
+          statsList[index].statModel.name,
           style: TextStyle(
             color: fighter.category.textColor,
             fontSize: 14,
@@ -42,9 +46,9 @@ class StatColumn extends StatelessWidget {
           ),
         ),
         title: Text(
-          fighter.stats.values.elementAt(index2).toString(),
+          statsList[index].value.toString(),
           style: TextStyle(
-            color: fighter.stats.keys.elementAt(index2).color,
+            color: statsList[index].statModel.color,
             fontSize: 20,
             fontWeight: FontWeight.bold,
             fontFamily: 'Poppins',
