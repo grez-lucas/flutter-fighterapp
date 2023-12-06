@@ -41,8 +41,8 @@ class Turn {
     }
 
     if (hasCrit) {
-      damage = attacker.stats.strength.value * attacker.stats.speed.value * 2 -
-          defender.stats.defense.value;
+      damage = ((attacker.stats.strength.value * attacker.stats.speed.value * 2 -
+          defender.stats.defense.value) / 100).floor();
     } else {
       damage = ((attacker.stats.strength.value * attacker.stats.speed.value -
                   defender.stats.defense.value) /
