@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:category_app2/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +26,14 @@ class _FightScreenState extends State<FightScreen> {
 
   bool fightStarted = false;
 
+  // Stuff for the fight log
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey();
+  Timer? _timer;
+  List<String> _fightLogLines = [];
+  ScrollController _scrollController = ScrollController();
+
+
+
   void _getFighters() {
     fighters = FighterModel.getFighters();
   }
@@ -44,6 +54,43 @@ class _FightScreenState extends State<FightScreen> {
   void _startFight() {
     fight = Fight(fighter1: fighter1, fighter2: fighter2);
     fight.startFight();
+  }
+
+  void startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      var totalTurns = fight.turns.length;
+      var totalFightLogLines = fight.getFightLog().split("\n").length;
+
+      if (_fightLogLines.length < totalFightLogLines) {
+        var currentTurnLog =
+            fight.getFightLog().split("\n")[_fightLogLines.length];
+        _fightLogLines.add(currentTurnLog);
+        _listKey.currentState?.insertItem(_fightLogLines.length - 1);
+
+        // Scroll to the bottom of the list
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeOut,
+        );
+
+        // Play sound effect of the turn
+        if (_fightLogLines.length > 1 &&
+            _fightLogLines.length < totalFightLogLines - 1) {
+          var currentTurn = fight.turns[_fightLogLines.length - 2];
+          currentTurn.playSound();
+          // TODO: Check which fighter was damaged and update damagedFighter variable
+          
+        } else {
+          // If a player is dead, play death sound
+          if (_fightLogLines.length == totalFightLogLines - 1) {
+            AudioPlayer().play(AssetSource('audio/death.mp3'));
+          }
+        }
+      } else {
+        timer.cancel();
+      }
+    });
   }
 
   @override
@@ -138,13 +185,18 @@ class _FightScreenState extends State<FightScreen> {
                         child: Stack(
                           children: [
                             if (fightStarted)
-                              LogContainer(fight: fight)
+                              LogContainer(fight: fight,
+                              fightLogLines: _fightLogLines,
+                              listKey: _listKey,
+                              scrollController: _scrollController,
+                              timer: _timer,)
                             else
                               ElevatedButton(
                                 onPressed: () {
                                   AudioPlayer()
                                       .play(AssetSource('audio/gong.mp3'));
                                   _startFight();
+                                  startTimer();
                                   setState(() => fightStarted = true);
                                 },
                                 child: const Text("Begin Fight"),
