@@ -59,70 +59,73 @@ class _HomePageState extends State<HomePage> {
           children: [
             _searchBar(),
             _categorySection(),
-            Column(
-              children: [
-                Container(
-                  alignment: Alignment.centerLeft,
-                  margin: const EdgeInsets.only(left: 20, bottom: 10, top: 20),
-                  child: const Text(
-                    'Popular Fighters',
-                    style: TextStyle(
+            _popularFighters(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Column _popularFighters() {
+    return Column(
+      children: [
+        Container(
+          alignment: Alignment.centerLeft,
+          margin: const EdgeInsets.only(left: 20, bottom: 10, top: 20),
+          child: const Text(
+            'Popular Fighters',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 164,
+          child: ListView.separated(
+            itemCount: fighters.length,
+            scrollDirection: Axis.vertical,
+            separatorBuilder: (context, index) {
+              return const SizedBox(
+                height: 5,
+              );
+            },
+            itemBuilder: (context, index) {
+              return Container(
+                width: 100,
+                color: fighters[index].category.bgColor.withOpacity(0.75),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/herodetail',
+                        arguments: fighters[index]);
+                  },
+                  trailing: const Icon(Icons.arrow_forward_ios_rounded),
+                  leading: SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Image.asset(
+                      fighters[index].image,
+                      width: 50,
+                      height: 5,
+                    ),
+                  ),
+                  title: Text(
+                    fighters[index].name,
+                    style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 20,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Poppins',
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 200,
-                  child: ListView.separated(
-                    itemCount: fighters.length,
-                    scrollDirection: Axis.vertical,
-                    separatorBuilder: (context, index) {
-                      return const SizedBox(
-                        height: 5,
-                      );
-                    },
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: 100,
-                        color:
-                            fighters[index].category.bgColor.withOpacity(0.75),
-                        child: ListTile(
-                          onTap: () {
-                            Navigator.pushNamed(context, '/herodetail',
-                                arguments: fighters[index]);
-                          },
-                          trailing: const Icon(Icons.arrow_forward_ios_rounded),
-                          leading: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Image.asset(
-                              fighters[index].image,
-                              width: 50,
-                              height: 5,
-                            ),
-                          ),
-                          title: Text(
-                            fighters[index].name,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            )
-          ],
+              );
+            },
+          ),
         ),
-      ),
+      ],
     );
   }
 
