@@ -26,7 +26,6 @@ class Fight {
     }
 
     while (fighter1.isAlive() && fighter2.isAlive()) {
-
       if (turnNumber > 30) {
         log.add(
             'The fight has reached the maximum number of turns. It is a draw.');
@@ -52,11 +51,22 @@ class Fight {
         break;
       }
 
-
       // Switch attacker and defender
       currentAttacker = currentDefender;
       currentDefender = currentAttacker == fighter1 ? fighter2 : fighter1;
       turnNumber++;
     }
+  }
+
+  String getFightLog() {
+    String fightLog = '';
+
+    fightLog += '${log[0]}\n';
+    log.sublist(1, log.length - 1).asMap().forEach((index, log) {
+      fightLog += 'Turn ${index + 1}: $log\n';
+    });
+    fightLog += '${log[log.length - 1]}\n';
+
+    return fightLog;
   }
 }

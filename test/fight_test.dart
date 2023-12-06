@@ -36,9 +36,7 @@ void main() {
 
     fight.startFight();
 
-    fight.log.asMap().forEach((index, log) {
-      print('Turn ${fight.turns.length}: $log\n');
-    });
+    print(fight.getFightLog());
 
     // expect(fight.turns.length, 3);
     // expect(fight.log.length, 4);
