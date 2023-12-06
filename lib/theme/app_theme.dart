@@ -10,6 +10,9 @@ class AppTheme {
       // Mystical Indigo
       ;
 
+  static const Color secondaryColor =
+      Color.fromARGB(255, 224, 224, 126); // Black
+
   static const Color backgroundColor =
       Color.fromARGB(255, 128, 128, 128); // Mystical Gray
 
@@ -30,5 +33,23 @@ class AppTheme {
       unselectedItemColor: Colors.white.withOpacity(.60),
     ),
     scaffoldBackgroundColor: backgroundColor,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: secondaryColor,
+        textStyle: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 40,
+          vertical: 20,
+        ),
+      ),
+    ),
   );
 }

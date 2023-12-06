@@ -9,6 +9,7 @@ class AppRoutes {
   static Map<String, Widget Function(BuildContext)> routes = {
     '/heroroster': (BuildContext context) => const HeroRosterScreen(),
     '/home': (BuildContext context) => HomePage(),
+    '/fight': (BuildContext context) => const FightScreen(),
   };
 
   static Route<dynamic>? Function(RouteSettings)? onGenerateRoute =
