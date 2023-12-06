@@ -1,9 +1,14 @@
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:category_app2/router/app_routes.dart';
 import 'package:category_app2/theme/app_theme.dart';
-import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,10 +17,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        theme: AppTheme.lightTheme,
-        initialRoute: AppRoutes.initialRoute,
-        routes: AppRoutes.routes,
-        onGenerateRoute: AppRoutes.onGenerateRoute,
-        );
+      theme: AppTheme.lightTheme,
+      initialRoute: AppRoutes.initialRoute,
+      routes: AppRoutes.routes,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
+    );
   }
 }
