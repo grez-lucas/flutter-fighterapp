@@ -28,7 +28,7 @@ void main() {
     do {
       fighter1 = fighters[Random().nextInt(fighters.length)];
       fighter2 = fighters[Random().nextInt(fighters.length)];
-    } while (fighters[0].name == fighters[1].name);
+    } while (fighter1.name == fighter2.name);
 
     final fight = Fight(fighter1: fighter1, fighter2: fighter2);
 
