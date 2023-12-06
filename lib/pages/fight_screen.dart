@@ -66,9 +66,8 @@ class _FightScreenState extends State<FightScreen> {
           children: [
             Expanded(
               child: Column(children: [
-                Container(
+                SizedBox(
                     height: MediaQuery.of(context).size.height * 0.6,
-                    color: Colors.red[400],
                     child: Stack(
                       children: [
                         Column(
@@ -115,28 +114,7 @@ class _FightScreenState extends State<FightScreen> {
                             ),
                           ],
                         ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.black,
-                                width: 2,
-                              ),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                "VS",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ),
-                        ),
+                        const VSCircle(),
                       ],
                     )),
                 Expanded(
@@ -154,36 +132,7 @@ class _FightScreenState extends State<FightScreen> {
                         child: Stack(
                           children: [
                             if (fightStarted)
-                              Container(
-                                color: Colors.yellow[100],
-                                height: 190,
-                                width: 290,
-                                child: Column(
-                                  children: [
-                                    const Text(
-                                      "Log",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w200),
-                                    ),
-                                    Expanded(
-                                      child: ListView.builder(
-                                        itemCount: fight.getFightLog().split("\n").length,
-                                        itemBuilder: (context, index) {
-                                          return Text(
-                                            fight
-                                                .getFightLog()
-                                                .split("\n")[index],
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
+                              LogContainer(fight: fight)
                             else
                               ElevatedButton(
                                 onPressed: () {
