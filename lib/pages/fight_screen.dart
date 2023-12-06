@@ -77,38 +77,44 @@ class _FightScreenState extends State<FightScreen> {
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
-                                  child: PageView.builder(
-                                    onPageChanged: (int index) {
-                                      setState(() {
-                                        fighter1 = fighter1Options[index];
-                                        _updateFighter2Options();
-                                      });
-                                    },
-                                    itemCount: fighter1Options.length,
-                                    itemBuilder: (context, index) {
-                                      return SelectFighter(
-                                          fighters: fighter1Options,
-                                          index: index);
-                                    },
-                                  ),
+                                  child: fightStarted
+                                      ? SelectFighter(
+                                          fighters: [fighter1], index: 0)
+                                      : PageView.builder(
+                                          onPageChanged: (int index) {
+                                            setState(() {
+                                              fighter1 = fighter1Options[index];
+                                              _updateFighter2Options();
+                                            });
+                                          },
+                                          itemCount: fighter1Options.length,
+                                          itemBuilder: (context, index) {
+                                            return SelectFighter(
+                                                fighters: fighter1Options,
+                                                index: index);
+                                          },
+                                        ),
                                 ),
                                 SizedBox(
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
-                                  child: PageView.builder(
-                                    onPageChanged: (int index) {
-                                      setState(() {
-                                        fighter2 = fighter2Options[index];
-                                        _updateFighter1Options();
-                                      });
-                                    },
-                                    itemCount: fighter2Options.length,
-                                    itemBuilder: (context, index) {
-                                      return SelectFighter(
-                                          fighters: fighter2Options,
-                                          index: index);
-                                    },
-                                  ),
+                                  child: fightStarted
+                                      ? SelectFighter(
+                                          fighters: [fighter2], index: 0)
+                                      : PageView.builder(
+                                          onPageChanged: (int index) {
+                                            setState(() {
+                                              fighter2 = fighter2Options[index];
+                                              _updateFighter1Options();
+                                            });
+                                          },
+                                          itemCount: fighter2Options.length,
+                                          itemBuilder: (context, index) {
+                                            return SelectFighter(
+                                                fighters: fighter2Options,
+                                                index: index);
+                                          },
+                                        ),
                                 ),
                               ],
                             ),
