@@ -18,6 +18,16 @@ class FighterModel {
       required this.description,
       required this.stats});
 
+  FighterModel.copy(FighterModel source)
+      : this(
+          name: source.name,
+          category: source.category,
+          image: source.image,
+          description: source.description,
+          stats: FighterStats.copy(source.stats),
+        );
+
+
   Map<String, dynamic> toJson() => {
         'name': name,
         'category': category,
@@ -226,6 +236,12 @@ class FighterStat {
     required this.statModel,
     required this.value,
   });
+
+    FighterStat.copy(FighterStat source)
+      : this(
+          statModel: source.statModel, // Assuming StatModel is immutable
+          value: source.value,
+        );
 }
 
 class FighterStats {
@@ -244,4 +260,15 @@ class FighterStats {
     required this.dodge,
     required this.defense,
   });
+
+    FighterStats.copy(FighterStats source)
+      : this(
+          strength: FighterStat.copy(source.strength),
+          health: FighterStat.copy(source.health),
+          speed: FighterStat.copy(source.speed),
+          crit: FighterStat.copy(source.crit),
+          dodge: FighterStat.copy(source.dodge),
+          defense: FighterStat.copy(source.defense),
+        );
+  
 }

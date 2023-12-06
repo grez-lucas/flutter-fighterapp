@@ -30,7 +30,9 @@ void main() {
       fighter2 = fighters[Random().nextInt(fighters.length)];
     } while (fighter1.name == fighter2.name);
 
-    final fight = Fight(fighter1: fighter1, fighter2: fighter2);
+    final fight = Fight(
+        fighter1: FighterModel.copy(fighter1),
+        fighter2: FighterModel.copy(fighter2));
 
     // print(fighters[0].stats);
 
