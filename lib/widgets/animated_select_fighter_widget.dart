@@ -60,7 +60,7 @@ class AnimatedSelectFighter extends StatelessWidget {
                     ),
                   )),
               if (fighterHealth <= 0)
-                XCircle(),
+                const XCircle(),
             ],
           );
         });

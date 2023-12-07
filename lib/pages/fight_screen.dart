@@ -111,52 +111,68 @@ class _FightScreenState extends State<FightScreen> {
       var totalFightLogLines = fight.getFightLog().split("\n").length;
 
       if (_fightLogLines.length < totalFightLogLines) {
-        var currentTurnLog =
-            fight.getFightLog().split("\n")[_fightLogLines.length];
-        _fightLogLines.add(currentTurnLog);
-        _listKey.currentState?.insertItem(_fightLogLines.length - 1);
+        updateTurnLog();
 
         // Scroll to the bottom of the list
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 700),
-          curve: Curves.easeOut,
-        );
+        scrollToLogBottom();
 
-        // Set the damaged fighter
-        if (_fightLogLines.length > 1 &&
-            _fightLogLines.length < totalFightLogLines - 1) {
-          var currentTurn = fight.turns[_fightLogLines.length - 2];
-
-          setState(() {
-            damagedFighter = currentTurn.defender.name;
-            if (currentTurn.defender.name == fighter1.name) {
-              setFighter1Health(
-                  fighter1OriginalHealth - currentTurn.dealtDamage);
-            } else {
-              setFighter2Health(
-                  fighter2OriginalHealth - currentTurn.dealtDamage);
-            }
-          });
-        }
+        // Set the damaged fighter and health if the turn is not the first or last
+        setDamagedFighterHealth(totalFightLogLines);
 
         // Play sound effect of the turn
-        if (_fightLogLines.length > 1 &&
-            _fightLogLines.length < totalFightLogLines - 1) {
-          var currentTurn = fight.turns[_fightLogLines.length - 2];
-          currentTurn.playSound();
-        } else {
-          // If a player is dead, play death sound
-          if (_fightLogLines.length == totalFightLogLines - 1) {
-            AudioPlayer().play(AssetSource('audio/death.mp3'));
-          }
-        }
+        playTurnSoundEffect(totalFightLogLines);
 
         endTurn();
       } else {
         timer.cancel();
       }
     });
+  }
+
+  void updateTurnLog() {
+    var currentTurnLog =
+        fight.getFightLog().split("\n")[_fightLogLines.length];
+    _fightLogLines.add(currentTurnLog);
+    _listKey.currentState?.insertItem(_fightLogLines.length - 1);
+  }
+
+  void setDamagedFighterHealth(int totalFightLogLines) {
+    if (_fightLogLines.length > 1 &&
+        _fightLogLines.length < totalFightLogLines - 1) {
+      var currentTurn = fight.turns[_fightLogLines.length - 2];
+    
+      setState(() {
+        damagedFighter = currentTurn.defender.name;
+        if (currentTurn.defender.name == fighter1.name) {
+          setFighter1Health(
+              fighter1OriginalHealth - currentTurn.dealtDamage);
+        } else {
+          setFighter2Health(
+              fighter2OriginalHealth - currentTurn.dealtDamage);
+        }
+      });
+    }
+  }
+
+  void scrollToLogBottom() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 700),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void playTurnSoundEffect(int totalFightLogLines) {
+    if (_fightLogLines.length > 1 &&
+        _fightLogLines.length < totalFightLogLines - 1) {
+      var currentTurn = fight.turns[_fightLogLines.length - 2];
+      currentTurn.playSound();
+    } else {
+      // If a player is dead, play death sound
+      if (_fightLogLines.length == totalFightLogLines - 1) {
+        AudioPlayer().play(AssetSource('audio/death.mp3'));
+      }
+    }
   }
 
   @override
