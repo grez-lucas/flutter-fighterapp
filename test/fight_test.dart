@@ -43,4 +43,31 @@ void main() {
     // expect(fight.turns.length, 3);
     // expect(fight.log.length, 4);
   });
+
+  test('Test Fight endFight() method', () {
+    final fighters = FighterModel.getFighters();
+
+    FighterModel fighter1;
+    FighterModel fighter2;
+
+    do {
+      fighter1 = fighters[Random().nextInt(fighters.length)];
+      fighter2 = fighters[Random().nextInt(fighters.length)];
+    } while (fighter1.name == fighter2.name);
+
+    final fight = Fight(
+        fighter1: FighterModel.copy(fighter1),
+        fighter2: FighterModel.copy(fighter2));
+
+    // print(fighters[0].stats);
+
+    fight.endFight();
+
+    List<Fight> fights = Fight.getFights();
+
+    expect(fights.length, 1);
+
+    // expect(fight.turns.length, 3);
+    // expect(fight.log.length, 4);
+  });
 }
