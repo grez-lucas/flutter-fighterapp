@@ -26,13 +26,14 @@ class _FightScreenState extends State<FightScreen> {
 
   bool fightStarted = false;
 
+  final ValueNotifier<bool> turnEndedNotifier = ValueNotifier<bool>(false);
+
   // Stuff for the fight log
   final GlobalKey<AnimatedListState> _listKey = GlobalKey();
   Timer? _timer;
-  List<String> _fightLogLines = [];
-  ScrollController _scrollController = ScrollController();
-
-
+  String damagedFighter = "";
+  final List<String> _fightLogLines = [];
+  final ScrollController _scrollController = ScrollController();
 
   void _getFighters() {
     fighters = FighterModel.getFighters();
@@ -44,16 +45,49 @@ class _FightScreenState extends State<FightScreen> {
   }
 
   void _updateFighter1Options() {
-    fighter1Options = fighters.where((fighter) => fighter != fighter2).toList();
+    setState(() {
+      fighter1Options =
+          fighters.where((fighter) => fighter != fighter2).toList();
+    });
   }
 
   void _updateFighter2Options() {
-    fighter2Options = fighters.where((fighter) => fighter != fighter1).toList();
+    setState(() {
+      fighter2Options =
+          fighters.where((fighter) => fighter != fighter1).toList();
+    });
+  }
+
+  void setFighter1(FighterModel fighter) {
+    setState(() {
+      fighter1 = fighter;
+    });
+  }
+
+  void setFighter2(FighterModel fighter) {
+    setState(() {
+      fighter2 = fighter;
+    });
   }
 
   void _startFight() {
-    fight = Fight(fighter1: fighter1, fighter2: fighter2);
+    setState(() {
+      // Make a copy of each fighter so that the original stats are not modified
+      fighter1 = FighterModel.copy(fighter1);
+      fighter2 = FighterModel.copy(fighter2);
+
+      fight = Fight(fighter1: fighter1, fighter2: fighter2);
+      fightStarted = true;
+    });
+
     fight.startFight();
+  }
+
+  void endTurn() {
+    turnEndedNotifier.value = true;
+    turnEndedNotifier.value = false;
+
+    
   }
 
   void startTimer() {
@@ -74,19 +108,29 @@ class _FightScreenState extends State<FightScreen> {
           curve: Curves.easeOut,
         );
 
+        // Set the damaged fighter
+        if (_fightLogLines.length > 1 &&
+            _fightLogLines.length < totalFightLogLines - 1) {
+          var currentTurn = fight.turns[_fightLogLines.length - 2];
+
+          setState(() {
+            damagedFighter = currentTurn.defender.name;
+          });
+        }
+
         // Play sound effect of the turn
         if (_fightLogLines.length > 1 &&
             _fightLogLines.length < totalFightLogLines - 1) {
           var currentTurn = fight.turns[_fightLogLines.length - 2];
           currentTurn.playSound();
-          // TODO: Check which fighter was damaged and update damagedFighter variable
-          
         } else {
           // If a player is dead, play death sound
           if (_fightLogLines.length == totalFightLogLines - 1) {
             AudioPlayer().play(AssetSource('audio/death.mp3'));
           }
         }
+
+        endTurn();
       } else {
         timer.cancel();
       }
@@ -125,20 +169,21 @@ class _FightScreenState extends State<FightScreen> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
                                   child: fightStarted
-                                      ? SelectFighter(
-                                          fighters: [fighter1], index: 0)
+                                      ? AnimatedSelectFighter(
+                                          turnEndedNotifier: turnEndedNotifier,
+                                          fighter: fighter1,
+                                          damagedFighter: damagedFighter)
                                       : PageView.builder(
                                           onPageChanged: (int index) {
-                                            setState(() {
-                                              fighter1 = fighter1Options[index];
-                                              _updateFighter2Options();
-                                            });
+                                            setFighter1(fighter1Options[index]);
+                                            _updateFighter2Options();
                                           },
                                           itemCount: fighter1Options.length,
                                           itemBuilder: (context, index) {
                                             return SelectFighter(
-                                                fighters: fighter1Options,
-                                                index: index);
+                                              fighters: fighter1Options,
+                                              index: index,
+                                            );
                                           },
                                         ),
                                 ),
@@ -146,20 +191,21 @@ class _FightScreenState extends State<FightScreen> {
                                   height:
                                       MediaQuery.of(context).size.height * 0.3,
                                   child: fightStarted
-                                      ? SelectFighter(
-                                          fighters: [fighter2], index: 0)
+                                      ? AnimatedSelectFighter(
+                                          turnEndedNotifier: turnEndedNotifier,
+                                          fighter: fighter2,
+                                          damagedFighter: damagedFighter)
                                       : PageView.builder(
                                           onPageChanged: (int index) {
-                                            setState(() {
-                                              fighter2 = fighter2Options[index];
-                                              _updateFighter1Options();
-                                            });
+                                            setFighter2(fighter2Options[index]);
+                                            _updateFighter1Options();
                                           },
                                           itemCount: fighter2Options.length,
                                           itemBuilder: (context, index) {
                                             return SelectFighter(
-                                                fighters: fighter2Options,
-                                                index: index);
+                                              fighters: fighter2Options,
+                                              index: index,
+                                            );
                                           },
                                         ),
                                 ),
@@ -185,11 +231,13 @@ class _FightScreenState extends State<FightScreen> {
                         child: Stack(
                           children: [
                             if (fightStarted)
-                              LogContainer(fight: fight,
-                              fightLogLines: _fightLogLines,
-                              listKey: _listKey,
-                              scrollController: _scrollController,
-                              timer: _timer,)
+                              LogContainer(
+                                fight: fight,
+                                fightLogLines: _fightLogLines,
+                                listKey: _listKey,
+                                scrollController: _scrollController,
+                                timer: _timer,
+                              )
                             else
                               ElevatedButton(
                                 onPressed: () {
@@ -197,7 +245,6 @@ class _FightScreenState extends State<FightScreen> {
                                       .play(AssetSource('audio/gong.mp3'));
                                   _startFight();
                                   startTimer();
-                                  setState(() => fightStarted = true);
                                 },
                                 child: const Text("Begin Fight"),
                               ),

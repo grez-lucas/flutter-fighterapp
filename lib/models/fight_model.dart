@@ -8,6 +8,14 @@ class Fight {
 
   Fight({required this.fighter1, required this.fighter2});
 
+  FighterModel getFighter1() {
+    return fighter1;
+  }
+
+  FighterModel getFighter2() {
+    return fighter2;
+  }
+
   void startFight() {
     int turnNumber = 1;
     Turn turn;
@@ -17,12 +25,12 @@ class Fight {
     // First attacker is the one with the highest speed
     if (fighter1.stats.speed.value > fighter2.stats.speed.value) {
       log.add('${fighter1.name} attacks first!');
-      currentAttacker = fighter1;
-      currentDefender = fighter2;
+      currentAttacker =fighter1;
+      currentDefender =fighter2;
     } else {
       log.add('${fighter2.name} attacks first!');
-      currentAttacker = fighter2;
-      currentDefender = fighter1;
+      currentAttacker =fighter2;
+      currentDefender =fighter1;
     }
 
     while (fighter1.isAlive() && fighter2.isAlive()) {
