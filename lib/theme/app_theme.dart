@@ -40,7 +40,6 @@ class AppTheme {
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Colors.black,
-
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
@@ -50,6 +49,22 @@ class AppTheme {
           vertical: 20,
         ),
       ),
+    ),
+
+    // Input Decoration
+
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(20),
+        borderSide: BorderSide.none,
+      ),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 16,
+      ),
+      
     ),
   );
 }

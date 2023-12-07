@@ -4,12 +4,13 @@ import '../models/fighter_model.dart';
 import '../pages/pages.dart';
 
 class AppRoutes {
-  static const initialRoute = '/home';
+  static const initialRoute = '/createfighter';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     '/heroroster': (BuildContext context) => const HeroRosterScreen(),
     '/home': (BuildContext context) => HomePage(),
     '/fight': (BuildContext context) => const FightScreen(),
+    '/createfighter': (BuildContext context) => const CreateFighterScreen(),
   };
 
   static Route<dynamic>? Function(RouteSettings)? onGenerateRoute =
