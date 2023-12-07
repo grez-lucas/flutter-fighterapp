@@ -36,6 +36,9 @@ class _FightScreenState extends State<FightScreen> {
   final ScrollController _scrollController = ScrollController();
   late int fighter1OriginalHealth;
   late int fighter2OriginalHealth;
+  bool dodged = false;
+  bool blocked = false;
+  bool crit = false;
 
   void _getFighters() {
     fighters = FighterModel.getFighters();
@@ -107,7 +110,6 @@ class _FightScreenState extends State<FightScreen> {
 
   void startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      var totalTurns = fight.turns.length;
       var totalFightLogLines = fight.getFightLog().split("\n").length;
 
       if (_fightLogLines.length < totalFightLogLines) {
@@ -130,8 +132,7 @@ class _FightScreenState extends State<FightScreen> {
   }
 
   void updateTurnLog() {
-    var currentTurnLog =
-        fight.getFightLog().split("\n")[_fightLogLines.length];
+    var currentTurnLog = fight.getFightLog().split("\n")[_fightLogLines.length];
     _fightLogLines.add(currentTurnLog);
     _listKey.currentState?.insertItem(_fightLogLines.length - 1);
   }
@@ -140,16 +141,18 @@ class _FightScreenState extends State<FightScreen> {
     if (_fightLogLines.length > 1 &&
         _fightLogLines.length < totalFightLogLines - 1) {
       var currentTurn = fight.turns[_fightLogLines.length - 2];
-    
+
       setState(() {
         damagedFighter = currentTurn.defender.name;
         if (currentTurn.defender.name == fighter1.name) {
-          setFighter1Health(
-              fighter1OriginalHealth - currentTurn.dealtDamage);
+          setFighter1Health(fighter1OriginalHealth - currentTurn.dealtDamage);
         } else {
-          setFighter2Health(
-              fighter2OriginalHealth - currentTurn.dealtDamage);
+          setFighter2Health(fighter2OriginalHealth - currentTurn.dealtDamage);
         }
+
+        dodged = currentTurn.isDodged;
+        blocked = currentTurn.isBlocked;
+        crit = currentTurn.isCrit;
       });
     }
   }
@@ -211,7 +214,11 @@ class _FightScreenState extends State<FightScreen> {
                                           turnEndedNotifier: turnEndedNotifier,
                                           fighter: fighter1,
                                           damagedFighter: damagedFighter,
-                                          fighterHealth: fighter1OriginalHealth)
+                                          fighterHealth: fighter1OriginalHealth,
+                                          dodged: dodged,
+                                          blocked: blocked,
+                                          crit: crit,
+                                        )
                                       : PageView.builder(
                                           onPageChanged: (int index) {
                                             setFighter1(fighter1Options[index]);
@@ -234,7 +241,11 @@ class _FightScreenState extends State<FightScreen> {
                                           turnEndedNotifier: turnEndedNotifier,
                                           fighter: fighter2,
                                           damagedFighter: damagedFighter,
-                                          fighterHealth: fighter2OriginalHealth)
+                                          fighterHealth: fighter2OriginalHealth,
+                                          dodged: dodged,
+                                          blocked: blocked,
+                                          crit: crit,
+                                        )
                                       : PageView.builder(
                                           onPageChanged: (int index) {
                                             setFighter2(fighter2Options[index]);
@@ -281,8 +292,8 @@ class _FightScreenState extends State<FightScreen> {
                             else
                               ElevatedButton(
                                 onPressed: () {
-                                  AudioPlayer()
-                                      .play(AssetSource('audio/gong.mp3'));
+                                  AudioPlayer().play(
+                                      AssetSource('audio/ready-fight.mp3'));
                                   _startFight();
                                   startTimer();
                                 },

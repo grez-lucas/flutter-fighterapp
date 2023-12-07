@@ -10,12 +10,22 @@ class AnimatedSelectFighter extends StatelessWidget {
     required this.fighter,
     required this.damagedFighter,
     required this.fighterHealth,
+    required this.dodged,
+    required this.blocked,
+    required this.crit,
   });
 
   final ValueNotifier<bool> turnEndedNotifier;
   final FighterModel fighter;
   final String damagedFighter;
   final int fighterHealth;
+  final bool dodged;
+  final bool blocked;
+  final bool crit;
+
+  bool isDamaged() {
+    return damagedFighter == fighter.name;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +41,14 @@ class AnimatedSelectFighter extends StatelessWidget {
               AnimatedContainer(
                 duration: const Duration(milliseconds: 500),
                 decoration: BoxDecoration(
-                  color: damagedFighter == fighter.name
-                      ? Colors.red.withOpacity(0.5)
+                  color: isDamaged()
+                      ? (dodged
+                          ? Colors.white.withOpacity(0.5)
+                          : blocked
+                              ? Colors.grey.withOpacity(0.5)
+                              : crit
+                                  ? Colors.yellow.withOpacity(0.8)
+                                  : Colors.red.withOpacity(0.5))
                       : Colors.transparent,
                 ),
                 height: double.infinity,
@@ -59,11 +75,18 @@ class AnimatedSelectFighter extends StatelessWidget {
                       ),
                     ),
                   )),
-              if (fighterHealth <= 0)
-                const XCircle(),
+              if (fighterHealth <= 0) const XCircle(),
+              if (!isDamaged())
+                Align(
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    'assets/gifs/sword-swing.gif',
+                    width: 100,
+                    height: 100,
+                  ),
+                ),
             ],
           );
         });
   }
 }
-

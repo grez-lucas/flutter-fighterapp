@@ -69,6 +69,7 @@ flutter:
     - assets/audio/chuckle.mp3
     - assets/audio/death.mp3
     - assets/audio/crit.mp3
+    - assets/gifs/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
