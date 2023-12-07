@@ -9,11 +9,13 @@ class AnimatedSelectFighter extends StatelessWidget {
     required this.turnEndedNotifier,
     required this.fighter,
     required this.damagedFighter,
+    required this.fighterHealth,
   });
 
   final ValueNotifier<bool> turnEndedNotifier;
   final FighterModel fighter;
   final String damagedFighter;
+  final int fighterHealth;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +43,7 @@ class AnimatedSelectFighter extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 20, bottom: 10),
                     child: Text(
-                      '${fighter.stats.health.value.toString()} HP',
+                      '${fighterHealth.toString()} HP',
                       style: TextStyle(
                         shadows: const [
                           Shadow(

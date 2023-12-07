@@ -34,6 +34,8 @@ class _FightScreenState extends State<FightScreen> {
   String damagedFighter = "";
   final List<String> _fightLogLines = [];
   final ScrollController _scrollController = ScrollController();
+  late int fighter1OriginalHealth;
+  late int fighter2OriginalHealth;
 
   void _getFighters() {
     fighters = FighterModel.getFighters();
@@ -70,8 +72,23 @@ class _FightScreenState extends State<FightScreen> {
     });
   }
 
+  void setFighter1Health(int health) {
+    setState(() {
+      fighter1OriginalHealth = health;
+    });
+  }
+
+  void setFighter2Health(int health) {
+    setState(() {
+      fighter2OriginalHealth = health;
+    });
+  }
+
   void _startFight() {
     setState(() {
+      // Copy the original health values
+      fighter1OriginalHealth = fighter1.stats.health.value;
+      fighter2OriginalHealth = fighter2.stats.health.value;
       // Make a copy of each fighter so that the original stats are not modified
       fighter1 = FighterModel.copy(fighter1);
       fighter2 = FighterModel.copy(fighter2);
@@ -86,8 +103,6 @@ class _FightScreenState extends State<FightScreen> {
   void endTurn() {
     turnEndedNotifier.value = true;
     turnEndedNotifier.value = false;
-
-    
   }
 
   void startTimer() {
@@ -115,6 +130,13 @@ class _FightScreenState extends State<FightScreen> {
 
           setState(() {
             damagedFighter = currentTurn.defender.name;
+            if (currentTurn.defender.name == fighter1.name) {
+              setFighter1Health(
+                  fighter1OriginalHealth - currentTurn.dealtDamage);
+            } else {
+              setFighter2Health(
+                  fighter2OriginalHealth - currentTurn.dealtDamage);
+            }
           });
         }
 
@@ -172,7 +194,8 @@ class _FightScreenState extends State<FightScreen> {
                                       ? AnimatedSelectFighter(
                                           turnEndedNotifier: turnEndedNotifier,
                                           fighter: fighter1,
-                                          damagedFighter: damagedFighter)
+                                          damagedFighter: damagedFighter,
+                                          fighterHealth: fighter1OriginalHealth)
                                       : PageView.builder(
                                           onPageChanged: (int index) {
                                             setFighter1(fighter1Options[index]);
@@ -194,7 +217,8 @@ class _FightScreenState extends State<FightScreen> {
                                       ? AnimatedSelectFighter(
                                           turnEndedNotifier: turnEndedNotifier,
                                           fighter: fighter2,
-                                          damagedFighter: damagedFighter)
+                                          damagedFighter: damagedFighter,
+                                          fighterHealth: fighter2OriginalHealth)
                                       : PageView.builder(
                                           onPageChanged: (int index) {
                                             setFighter2(fighter2Options[index]);
