@@ -15,8 +15,9 @@ class SelectFighter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(fit: StackFit.expand, children: [
-      Image.asset(
-        fighters[index].category.backgroundImage,
+      FadeInImage(
+        image: AssetImage(fighters[index].category.backgroundImage),
+        placeholder: const AssetImage('assets/gifs/loading.gif'),
         fit: BoxFit.cover,
       ),
       Align(
