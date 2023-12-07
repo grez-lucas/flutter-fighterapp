@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
+import '../widgets/app_widgets.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   List<CategoryModel> categories = [];
   List<FighterModel> fighters = [];
+  List<Fight> fights = [];
 
   void _getFighters() {
     fighters = FighterModel.getFighters();
@@ -21,11 +23,31 @@ class _HomePageState extends State<HomePage> {
     categories = CategoryModel.getCategories();
   }
 
+  void _getFights() {
+    fights = Fight.getFights();
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _getCategories();
     _getFighters();
+    _getFights();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Runs every time the app resumes
+    _getCategories();
+    _getFighters();
+    _getFights();
   }
 
   @override
@@ -60,6 +82,40 @@ class _HomePageState extends State<HomePage> {
             _searchBar(),
             _categorySection(),
             _popularFighters(),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                margin: const EdgeInsets.only(left: 20, bottom: 10, top: 20),
+                child: const Text(
+                  'Latest Fights',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                  ),
+                ),
+              ),
+              fights.isEmpty
+                  ? const Align(
+                      alignment: Alignment.center, child: Text('No fights yet'))
+                  : Container(
+                      height: 80,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.separated(
+                        itemCount: fights.length,
+                        scrollDirection: Axis.vertical,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(
+                            width: 5,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          return LatestFight(fights: fights, index: index);
+                        },
+                      ),
+                    ),
+            ])
           ],
         ),
       ),
@@ -95,7 +151,17 @@ class _HomePageState extends State<HomePage> {
             itemBuilder: (context, index) {
               return Container(
                 width: 100,
-                color: fighters[index].category.bgColor.withOpacity(0.75),
+                decoration: BoxDecoration(
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 5,
+                      offset: Offset(1, 1),
+                      blurStyle: BlurStyle.inner,
+                    ),
+                  ],
+                  color: fighters[index].category.bgColor.withOpacity(0.75),
+                ),
                 child: ListTile(
                   onTap: () {
                     Navigator.pushNamed(context, '/herodetail',
@@ -105,10 +171,9 @@ class _HomePageState extends State<HomePage> {
                   leading: SizedBox(
                     width: 50,
                     height: 50,
-                    child: Image.asset(
-                      fighters[index].image,
-                      width: 50,
-                      height: 5,
+                    child: CircleAvatar(
+                      backgroundImage: AssetImage(fighters[index].image),
+                      backgroundColor: fighters[index].category.bgColor,
                     ),
                   ),
                   title: Text(
@@ -136,7 +201,7 @@ class _HomePageState extends State<HomePage> {
           alignment: Alignment.centerLeft,
           margin: const EdgeInsets.only(left: 20, bottom: 10),
           child: const Text(
-            'Category',
+            'Categories',
             style: TextStyle(
               color: Colors.black,
               fontSize: 20,
@@ -156,7 +221,10 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               itemBuilder: (context, index) {
-                return _categoryBox(index);
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _categoryBox(index),
+                );
               }),
         ),
       ],
@@ -169,6 +237,14 @@ class _HomePageState extends State<HomePage> {
       decoration: BoxDecoration(
         color: categories[index].bgColor.withOpacity(0.75),
         borderRadius: BorderRadius.circular(15),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 5,
+            offset: Offset(1, 1),
+            blurStyle: BlurStyle.solid,
+          ),
+        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

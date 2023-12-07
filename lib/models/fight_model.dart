@@ -5,6 +5,7 @@ class Fight {
   final FighterModel fighter2;
   final List<Turn> turns = [];
   final List<String> log = [];
+  late FighterModel winner;
 
   static List<Fight> fights = [];
 
@@ -66,11 +67,13 @@ class Fight {
 
       if (!fighter2.isAlive()) {
         log.add('${fighter1.name} wins!');
+        winner = fighter1;
         break;
       }
 
       if (!fighter1.isAlive()) {
         log.add('${fighter2.name} wins!');
+        winner = fighter2;
         break;
       }
 
