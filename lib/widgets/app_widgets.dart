@@ -10,3 +10,4 @@ export "stat_slider_widget.dart";
 export "stats_wrapper_widget.dart";
 export "category_dropdown_widget.dart";
 export "nameform_widget.dart";
+export "imagecard_field_widget.dart";

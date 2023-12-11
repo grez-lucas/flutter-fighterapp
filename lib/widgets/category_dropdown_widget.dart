@@ -7,10 +7,12 @@ class CategoryDropDown extends StatelessWidget {
     super.key,
     required this.categories,
     required this.formValues,
+    required this.categoryNotifier,
   });
 
   final List<CategoryModel> categories;
   final Map<String, dynamic> formValues;
+  final ValueNotifier<CategoryModel> categoryNotifier;
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +20,8 @@ class CategoryDropDown extends StatelessWidget {
         value: categories[0],
         onChanged: (value) {
           formValues['category'] = value;
+          categoryNotifier.value = value!;
+
         },
         items: categories.map((category) {
           return DropdownMenuItem<CategoryModel>(

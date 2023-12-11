@@ -21,6 +21,8 @@ class CreateFighterScreen extends StatelessWidget {
 
     final List<CategoryModel> categories = CategoryModel.getCategories();
     final List<StatModel> stats = StatModel.getStats();
+    final ValueNotifier<CategoryModel> categoryNotifier =
+        ValueNotifier<CategoryModel>(categories[0]);
 
     return Scaffold(
       appBar: AppBar(
@@ -35,28 +37,18 @@ class CreateFighterScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Stack(children: [
-                      Card(
-                        elevation: 10,
-                        clipBehavior: Clip.antiAlias,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: FadeInImage(
-                          width: double.infinity,
-                          height: 200,
-                          fadeInDuration: const Duration(milliseconds: 200),
-                          placeholder:
-                              const AssetImage('assets/gifs/loading.gif'),
-                          image: AssetImage(
-                              formValues['category'].backgroundImage),
-                          fit: BoxFit.cover,
-                        ),
+                      ValueListenableBuilder(
+                        valueListenable: categoryNotifier,
+                        builder: (context, CategoryModel value, child) {
+                          return ImageCardField(category: value);
+                        },
                       ),
-                      const Positioned(
+                      Positioned(
                         top: 50,
                         right: 100,
                         child: Image(
-                          image: AssetImage('assets/icons/luken-light.png'),
+                          image: AssetImage(
+                              "assets/icons/luken-${formValues['category'].name.toLowerCase()}.png"),
                           width: 100,
                           height: 100,
                         ),
@@ -83,7 +75,11 @@ class CreateFighterScreen extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
-                    CategoryDropDown(categories: categories, formValues: formValues),
+                    CategoryDropDown(
+                      categories: categories,
+                      formValues: formValues,
+                      categoryNotifier: categoryNotifier,
+                    ),
                     const SizedBox(
                       height: 30,
                     ),
@@ -110,6 +106,5 @@ class CreateFighterScreen extends StatelessWidget {
     );
   }
 }
-
 
 
