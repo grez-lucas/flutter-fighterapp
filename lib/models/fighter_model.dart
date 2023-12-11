@@ -11,6 +11,8 @@ class FighterModel {
   static List<CategoryModel> categories = CategoryModel.getCategories();
   static List<StatModel> statsList = StatModel.getStats();
 
+  static List<FighterModel> fighters = getFighters();
+
   FighterModel(
       {required this.name,
       required this.category,
@@ -52,6 +54,14 @@ class FighterModel {
       stats.dodge,
       stats.defense,
     ];
+  }
+
+  void updateFighterImage(String path) {
+    image = path;
+  }
+
+  void addFighter() {
+    fighters.add(this);
   }
 
   static List<FighterModel> getFighters() {
