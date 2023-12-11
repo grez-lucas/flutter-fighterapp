@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class NameForm extends StatelessWidget {
-  const NameForm({
+  final TextEditingController _controller;
+
+  NameForm({
     super.key,
     required this.formProperty,
     required this.formValues,
-  });
+  }) : _controller = TextEditingController(text: formValues[formProperty]);
 
   final String formProperty;
   final Map<String, dynamic> formValues;
@@ -13,7 +15,7 @@ class NameForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: '',
+      controller: _controller,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Please enter a name';

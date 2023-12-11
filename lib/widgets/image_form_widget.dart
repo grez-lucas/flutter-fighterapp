@@ -51,18 +51,18 @@ class ImageForm extends StatelessWidget {
           icon: const Icon(Icons.camera_alt_outlined,
               color: Colors.white, size: 35),
           onPressed: () async {
-            print('Camera button clicked');
+            // print('Camera button clicked');
 
             final picker = ImagePicker();
             final XFile? pickedFile = await picker.pickImage(
                 source: ImageSource.camera, imageQuality: 100);
 
             if (pickedFile == null) {
-              print("We don't have a file");
+              // print("We don't have a file");
               return;
             }
 
-            print("We have a file at ${pickedFile.path}");
+            // print("We have a file at ${pickedFile.path}");
             formValues['image'] = pickedFile.path;
             imageNotifier.value = pickedFile.path;
           },

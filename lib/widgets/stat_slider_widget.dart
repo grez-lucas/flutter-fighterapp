@@ -62,7 +62,7 @@ class _StatSliderState extends State<StatSlider> {
           value: _sliderValue,
           onChanged: (value) {
             // formValues[stat.name.toLowerCase()] = value.floor();
-            print("currentValue: $_sliderValue");
+            // print("currentValue: $_sliderValue");
             setState(() {
               _sliderValue = value;
               widget.onChanged(widget.stat.name, value.floor().toDouble());

@@ -65,12 +65,13 @@ class CreateFighterScreen extends StatelessWidget {
                         // Get rid of the keyboard
                         FocusScope.of(context).requestFocus(FocusNode());
 
-                        if (!_formKey.currentState!.validate()) {
-                          print("Formulario no valido");
+                        if (!_formKey.currentState!.validate() ||
+                            formValues['image'] == null) {
+                          print("Form is not valid");
                           return;
                         }
 
-                        print('Create Fighter button clicked');
+                        // print('Create Fighter button clicked');
                         // TODO: Print form fields
                         print(formValues);
                       },
@@ -82,4 +83,3 @@ class CreateFighterScreen extends StatelessWidget {
     );
   }
 }
-
