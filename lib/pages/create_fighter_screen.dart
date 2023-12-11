@@ -61,13 +61,15 @@ class CreateFighterScreen extends StatelessWidget {
                           height: 100,
                         ),
                       ),
-                      const Positioned(
+                      Positioned(
                         bottom: 15,
                         right: 20,
-                        child: Icon(
-                          Icons.camera_alt_outlined,
-                          color: Colors.white,
-                          size: 40,
+                        child: IconButton(
+                          icon: const Icon(Icons.camera_alt_outlined,
+                              color: Colors.white, size: 35),
+                          onPressed: () {
+                            print('Camera button clicked');
+                          },
                         ),
                       )
                     ]),
@@ -81,33 +83,7 @@ class CreateFighterScreen extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
-                    DropdownButtonFormField<CategoryModel>(
-                        onChanged: (value) {
-                          formValues['category'] = value;
-                        },
-                        items: categories.map((category) {
-                          return DropdownMenuItem<CategoryModel>(
-                            value: category,
-                            child: Row(
-                              children: [
-                                category.icon,
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Text(category.name),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                        decoration: const InputDecoration(
-                          suffixIcon: Icon(Icons.category, color: Colors.black),
-                          hintText: 'Select a category',
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          )),
-                        )),
+                    CategoryDropDown(categories: categories, formValues: formValues),
                     const SizedBox(
                       height: 30,
                     ),
@@ -135,50 +111,5 @@ class CreateFighterScreen extends StatelessWidget {
   }
 }
 
-class NameForm extends StatelessWidget {
-  const NameForm({
-    super.key,
-    required this.formProperty,
-    required this.formValues,
-  });
 
-  final String formProperty;
-  final Map<String, dynamic> formValues;
 
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      initialValue: '',
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Please enter a name';
-        }
-
-        if (value.length < 3) {
-          return 'Please enter a name with at least 3 characters';
-        }
-
-        if (value.length > 15) {
-          return 'Please enter a name with less than 15 characters';
-        }
-        return null;
-      },
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      textCapitalization: TextCapitalization.words,
-      decoration: const InputDecoration(
-        suffixIcon: Icon(Icons.person, color: Colors.black),
-        hintText: 'Enter a name',
-        counterText: '3 characters minimum',
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        )),
-      ),
-      onChanged: (value) {
-        formValues[formProperty] = value;
-        // onChanged(value);
-      },
-    );
-  }
-}
