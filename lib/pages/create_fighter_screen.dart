@@ -34,6 +34,46 @@ class CreateFighterScreen extends StatelessWidget {
                 key: _formKey,
                 child: Column(
                   children: [
+                    Stack(children: [
+                      Card(
+                        elevation: 10,
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: FadeInImage(
+                          width: double.infinity,
+                          height: 200,
+                          fadeInDuration: const Duration(milliseconds: 200),
+                          placeholder:
+                              const AssetImage('assets/gifs/loading.gif'),
+                          image: AssetImage(
+                              formValues['category'].backgroundImage),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      const Positioned(
+                        top: 50,
+                        right: 100,
+                        child: Image(
+                          image: AssetImage('assets/icons/luken-light.png'),
+                          width: 100,
+                          height: 100,
+                        ),
+                      ),
+                      const Positioned(
+                        bottom: 15,
+                        right: 20,
+                        child: Icon(
+                          Icons.camera_alt_outlined,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      )
+                    ]),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     NameForm(
                       formProperty: 'name',
                       formValues: formValues,
@@ -95,9 +135,6 @@ class CreateFighterScreen extends StatelessWidget {
   }
 }
 
-
-
-
 class NameForm extends StatelessWidget {
   const NameForm({
     super.key,
@@ -145,4 +182,3 @@ class NameForm extends StatelessWidget {
     );
   }
 }
-
