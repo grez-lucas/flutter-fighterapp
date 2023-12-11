@@ -10,12 +10,31 @@ class CreateFighterScreen extends StatefulWidget {
 }
 
 class _CreateFighterScreenState extends State<CreateFighterScreen> {
-  double _strengthSliderValue = 50;
+  double strengthValue = 50;
+  double healthValue = 50;
+  double speedValue = 50;
+  double critValue = 5;
+  double dodgeValue = 50;
+  double defenseValue = 50;
 
-  void setStrengthSliderValue(double value) {
+  Map<String, dynamic> formValues = {
+    'name': '',
+    'category': CategoryModel.getCategories()[0],
+    'strength': 50,
+    'health': 50,
+    'speed': 50,
+    'crit': 5,
+    'dodge': 50,
+    'defense': 50,
+  };
+
+  void setSliderValue(int value, String statName) {
+    // Sets the value of the corresponding value in the formValues map
     setState(() {
-      _strengthSliderValue = value;
+      formValues[statName.toLowerCase()] = value;
     });
+    // print("New value for $statName: $value");
+    print(formValues);
   }
 
   @override
@@ -24,14 +43,6 @@ class _CreateFighterScreenState extends State<CreateFighterScreen> {
 
     final List<CategoryModel> categories = CategoryModel.getCategories();
     final List<StatModel> stats = StatModel.getStats();
-
-    final Map<String, dynamic> formValues = {
-      'name': '',
-      'category': '',
-      'image': '',
-      'strength': 50,
-      'health': 50,
-    };
 
     return Scaffold(
       appBar: AppBar(
@@ -112,7 +123,12 @@ class _CreateFighterScreenState extends State<CreateFighterScreen> {
                     Column(
                       children: stats.map((stat) {
                         return StatSlider(
-                            sliderValue: _strengthSliderValue, stat: stat);
+                            sliderValue:
+                                formValues[stat.name.toLowerCase()].toDouble(),
+                            stat: stat,
+                            onChanged: (value) {
+                              setSliderValue(value, stat.name);
+                            });
                       }).toList(),
                     ),
                     ElevatedButton(
@@ -138,16 +154,23 @@ class _CreateFighterScreenState extends State<CreateFighterScreen> {
   }
 }
 
-class StatSlider extends StatelessWidget {
+class StatSlider extends StatefulWidget {
   const StatSlider({
-    super.key,
+    Key? key,
     required this.sliderValue,
     required this.stat,
-  });
+    required this.onChanged,
+  }) : super(key: key);
 
   final double sliderValue;
   final StatModel stat;
+  final ValueChanged<int> onChanged;
 
+  @override
+  State<StatSlider> createState() => _StatSliderState();
+}
+
+class _StatSliderState extends State<StatSlider> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -157,23 +180,24 @@ class StatSlider extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              stat.icon,
+              widget.stat.icon,
               const SizedBox(
                 width: 10,
               ),
-              Text(stat.name,
+              Text(widget.stat.name,
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
         ),
         Slider.adaptive(
-          activeColor: stat.color,
-          min: 0,
-          max: 100,
+          activeColor: widget.stat.color,
+          min: widget.stat.min.toDouble(),
+          max: widget.stat.max.toDouble(),
           divisions: 10,
-          value: sliderValue,
+          value: widget.sliderValue.toDouble(),
           onChanged: (value) {
-            // sliderValue = value
+            widget.onChanged(value.floor());
+            // print(value.floor());
           },
         ),
       ],
