@@ -38,19 +38,22 @@ class _StatsWrapperState extends State<StatsWrapper> {
   @override
   Widget build(BuildContext context) {
     // print("StatsWrapper rebuild");
-    return Column(
-      children: widget.stats.map((stat) {
-        double initialValue =
-            widget.formValues[stat.name.toLowerCase()].toDouble() ?? 50.0;
-        return StatSlider(
-          key: UniqueKey(),
-          sliderValue: initialValue,
-          stat: stat,
-          onChanged: (statName, value) {
-            onChange(statName, value);
-          },
-        );
-      }).toList(),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20.0),
+      child: Column(
+        children: widget.stats.map((stat) {
+          double initialValue =
+              widget.formValues[stat.name.toLowerCase()].toDouble() ?? 50.0;
+          return StatSlider(
+            key: UniqueKey(),
+            sliderValue: initialValue,
+            stat: stat,
+            onChanged: (statName, value) {
+              onChange(statName, value);
+            },
+          );
+        }).toList(),
+      ),
     );
   }
 }

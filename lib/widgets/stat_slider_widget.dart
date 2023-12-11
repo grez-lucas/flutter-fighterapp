@@ -28,7 +28,7 @@ class _StatSliderState extends State<StatSlider> {
     _sliderValue = widget.sliderValue;
   }
 
-    @override
+  @override
   void didUpdateWidget(StatSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
     // Update the _sliderValue when the widget property changes
@@ -70,6 +70,10 @@ class _StatSliderState extends State<StatSlider> {
             // print(value.floor());
           },
         ),
+        Text(
+          _sliderValue.floor().toString(),
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        )
       ],
     );
   }
