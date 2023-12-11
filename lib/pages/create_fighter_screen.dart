@@ -1,11 +1,13 @@
 import 'package:category_app2/widgets/app_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../models/models.dart';
 
 class CreateFighterScreen extends StatelessWidget {
   Map<String, dynamic> formValues = {
     'name': '',
+    'image': null,
     'category': CategoryModel.getCategories()[0],
     'strength': 50,
     'health': 50,
@@ -36,35 +38,9 @@ class CreateFighterScreen extends StatelessWidget {
                 key: _formKey,
                 child: Column(
                   children: [
-                    Stack(children: [
-                      ValueListenableBuilder(
-                        valueListenable: categoryNotifier,
-                        builder: (context, CategoryModel value, child) {
-                          return ImageCardField(category: value);
-                        },
-                      ),
-                      Positioned(
-                        top: 50,
-                        right: 100,
-                        child: Image(
-                          image: AssetImage(
-                              "assets/icons/luken-${formValues['category'].name.toLowerCase()}.png"),
-                          width: 100,
-                          height: 100,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 15,
-                        right: 20,
-                        child: IconButton(
-                          icon: const Icon(Icons.camera_alt_outlined,
-                              color: Colors.white, size: 35),
-                          onPressed: () {
-                            print('Camera button clicked');
-                          },
-                        ),
-                      )
-                    ]),
+                    ImageForm(
+                        categoryNotifier: categoryNotifier,
+                        formValues: formValues),
                     const SizedBox(
                       height: 30,
                     ),
@@ -106,5 +82,4 @@ class CreateFighterScreen extends StatelessWidget {
     );
   }
 }
-
 
