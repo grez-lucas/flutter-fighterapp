@@ -10,7 +10,7 @@ class AppRoutes {
     '/heroroster': (BuildContext context) => const HeroRosterScreen(),
     '/home': (BuildContext context) => HomePage(),
     '/fight': (BuildContext context) => const FightScreen(),
-    '/createfighter': (BuildContext context) => const CreateFighterScreen(),
+    '/createfighter': (BuildContext context) => CreateFighterScreen(),
   };
 
   static Route<dynamic>? Function(RouteSettings)? onGenerateRoute =

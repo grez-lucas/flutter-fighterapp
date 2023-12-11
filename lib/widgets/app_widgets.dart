@@ -6,3 +6,5 @@ export "versus_circle_widget.dart";
 export "animated_select_fighter_widget.dart";
 export "x_circle_widget.dart";
 export "latest_fight_widget.dart";
+export "stat_slider_widget.dart";
+export "stats_wrapper_widget.dart";

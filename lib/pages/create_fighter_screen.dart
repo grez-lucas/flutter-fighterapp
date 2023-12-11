@@ -1,22 +1,9 @@
+import 'package:category_app2/widgets/app_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
 
-class CreateFighterScreen extends StatefulWidget {
-  const CreateFighterScreen({Key? key}) : super(key: key);
-
-  @override
-  State<CreateFighterScreen> createState() => _CreateFighterScreenState();
-}
-
-class _CreateFighterScreenState extends State<CreateFighterScreen> {
-  double strengthValue = 50;
-  double healthValue = 50;
-  double speedValue = 50;
-  double critValue = 5;
-  double dodgeValue = 50;
-  double defenseValue = 50;
-
+class CreateFighterScreen extends StatelessWidget {
   Map<String, dynamic> formValues = {
     'name': '',
     'category': CategoryModel.getCategories()[0],
@@ -27,15 +14,6 @@ class _CreateFighterScreenState extends State<CreateFighterScreen> {
     'dodge': 50,
     'defense': 50,
   };
-
-  void setSliderValue(int value, String statName) {
-    // Sets the value of the corresponding value in the formValues map
-    setState(() {
-      formValues[statName.toLowerCase()] = value;
-    });
-    // print("New value for $statName: $value");
-    print(formValues);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,36 +34,9 @@ class _CreateFighterScreenState extends State<CreateFighterScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a name';
-                        }
-
-                        if (value.length < 3) {
-                          return 'Please enter a name with at least 3 characters';
-                        }
-
-                        if (value.length > 15) {
-                          return 'Please enter a name with less than 15 characters';
-                        }
-                        return null;
-                      },
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: const InputDecoration(
-                        suffixIcon: Icon(Icons.person, color: Colors.black),
-                        hintText: 'Enter a name',
-                        counterText: '3 characters minimum',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(20),
-                          topRight: Radius.circular(20),
-                        )),
-                      ),
-                      onChanged: (value) {
-                        formValues['name'] = value;
-                      },
+                    NameForm(
+                      formProperty: 'name',
+                      formValues: formValues,
                     ),
                     const SizedBox(
                       height: 30,
@@ -120,17 +71,7 @@ class _CreateFighterScreenState extends State<CreateFighterScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    Column(
-                      children: stats.map((stat) {
-                        return StatSlider(
-                            sliderValue:
-                                formValues[stat.name.toLowerCase()].toDouble(),
-                            stat: stat,
-                            onChanged: (value) {
-                              setSliderValue(value, stat.name);
-                            });
-                      }).toList(),
-                    ),
+                    StatsWrapper(stats: stats, formValues: formValues),
                     ElevatedButton(
                       onPressed: () {
                         // Get rid of the keyboard
@@ -154,53 +95,54 @@ class _CreateFighterScreenState extends State<CreateFighterScreen> {
   }
 }
 
-class StatSlider extends StatefulWidget {
-  const StatSlider({
-    Key? key,
-    required this.sliderValue,
-    required this.stat,
-    required this.onChanged,
-  }) : super(key: key);
 
-  final double sliderValue;
-  final StatModel stat;
-  final ValueChanged<int> onChanged;
 
-  @override
-  State<StatSlider> createState() => _StatSliderState();
-}
 
-class _StatSliderState extends State<StatSlider> {
+class NameForm extends StatelessWidget {
+  const NameForm({
+    super.key,
+    required this.formProperty,
+    required this.formValues,
+  });
+
+  final String formProperty;
+  final Map<String, dynamic> formValues;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              widget.stat.icon,
-              const SizedBox(
-                width: 10,
-              ),
-              Text(widget.stat.name,
-                  style: const TextStyle(fontWeight: FontWeight.bold)),
-            ],
-          ),
-        ),
-        Slider.adaptive(
-          activeColor: widget.stat.color,
-          min: widget.stat.min.toDouble(),
-          max: widget.stat.max.toDouble(),
-          divisions: 10,
-          value: widget.sliderValue.toDouble(),
-          onChanged: (value) {
-            widget.onChanged(value.floor());
-            // print(value.floor());
-          },
-        ),
-      ],
+    return TextFormField(
+      initialValue: '',
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter a name';
+        }
+
+        if (value.length < 3) {
+          return 'Please enter a name with at least 3 characters';
+        }
+
+        if (value.length > 15) {
+          return 'Please enter a name with less than 15 characters';
+        }
+        return null;
+      },
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      textCapitalization: TextCapitalization.words,
+      decoration: const InputDecoration(
+        suffixIcon: Icon(Icons.person, color: Colors.black),
+        hintText: 'Enter a name',
+        counterText: '3 characters minimum',
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        )),
+      ),
+      onChanged: (value) {
+        formValues[formProperty] = value;
+        // onChanged(value);
+      },
     );
   }
 }
+
