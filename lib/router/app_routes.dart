@@ -4,7 +4,7 @@ import '../models/fighter_model.dart';
 import '../pages/pages.dart';
 
 class AppRoutes {
-  static const initialRoute = '/createfighter';
+  static const initialRoute = '/home';
 
   static Map<String, Widget Function(BuildContext)> routes = {
     '/heroroster': (BuildContext context) => const HeroRosterScreen(),

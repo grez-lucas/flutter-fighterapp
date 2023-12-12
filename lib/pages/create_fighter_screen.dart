@@ -7,6 +7,7 @@ import '../models/models.dart';
 class CreateFighterScreen extends StatelessWidget {
   Map<String, dynamic> formValues = {
     'name': '',
+    'description': '',
     'image': null,
     'category': CategoryModel.getCategories()[0],
     'strength': 50,
@@ -51,6 +52,13 @@ class CreateFighterScreen extends StatelessWidget {
                     const SizedBox(
                       height: 30,
                     ),
+                    NameForm(
+                      formProperty: 'description',
+                      formValues: formValues,
+                    ),
+                    const SizedBox(
+                      height: 30,
+                    ),
                     CategoryDropDown(
                       categories: categories,
                       formValues: formValues,
@@ -74,6 +82,10 @@ class CreateFighterScreen extends StatelessWidget {
                         // print('Create Fighter button clicked');
                         // TODO: Print form fields
                         print(formValues);
+
+                        // Create a new fighter
+
+                        // First create a
                       },
                       child: const Text('Create Fighter'),
                     ),

@@ -27,19 +27,24 @@ class _HeroRosterScreenState extends State<HeroRosterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hero Roster'),
-      ),
-      body: Expanded(
-        child: GridView.builder(
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              return FighterCard(fighter: fighters[index]);
-            },
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 0.7, crossAxisCount: 2),
-            itemCount: fighters.length),
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('Hero Roster'),
+        ),
+        body: Expanded(
+          child: GridView.builder(
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                return FighterCard(fighter: fighters[index]);
+              },
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.7, crossAxisCount: 2),
+              itemCount: fighters.length),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/createfighter');
+          },
+          child: const Icon(Icons.add),
+        ));
   }
 }
