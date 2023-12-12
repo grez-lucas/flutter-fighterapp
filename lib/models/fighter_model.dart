@@ -11,7 +11,7 @@ class FighterModel {
   static List<CategoryModel> categories = CategoryModel.getCategories();
   static List<StatModel> statsList = StatModel.getStats();
 
-  static List<FighterModel> fighters = getFighters();
+  static List<FighterModel> fighters = getInitialFighters();
 
   FighterModel(
       {required this.name,
@@ -60,11 +60,15 @@ class FighterModel {
     image = path;
   }
 
-  void addFighter() {
-    fighters.add(this);
+  static void addFighter(FighterModel fighter) {
+    fighters.add(fighter);
   }
 
   static List<FighterModel> getFighters() {
+    return fighters;
+  }
+
+  static List<FighterModel> getInitialFighters() {
     List<FighterModel> fighters = [];
     List<StatModel> statsList = StatModel.getStats();
 

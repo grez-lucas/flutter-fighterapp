@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
@@ -5,13 +7,11 @@ import '../widgets/app_widgets.dart';
 
 class HeroDetailScreen extends StatelessWidget {
   final FighterModel fighter;
-  
+
   const HeroDetailScreen({
     Key? key,
     required this.fighter,
   }) : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +41,17 @@ class HeroDetailScreen extends StatelessWidget {
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.5,
                   height: MediaQuery.of(context).size.height * 0.5,
-                  child: Image.asset(
-                    fighter.image,
-                  ),
+                  child: fighter.image.startsWith('assets')
+                      ? Image.asset(
+                          fighter.image,
+                          height: 100,
+                          width: 100,
+                        )
+                      : Image.file(
+                          File(fighter.image),
+                          height: 100,
+                          width: 100,
+                        ),
                 ),
               ),
               const DecoratedBox(

@@ -172,7 +172,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     width: 50,
                     height: 50,
                     child: CircleAvatar(
-                      backgroundImage: AssetImage(fighters[index].image),
+                      backgroundImage:
+                          fighters[index].image.startsWith('assets')
+                              ? AssetImage(fighters[index].image)
+                              : AssetImage(fighters[index].image),
                       backgroundColor: fighters[index].category.bgColor,
                     ),
                   ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import '../models/models.dart';
@@ -28,11 +30,17 @@ class FighterCard extends StatelessWidget {
             ListTile(
               leading: fighter.category.icon,
             ),
-            Image.asset(
-              fighter.image,
-              height: 100,
-              width: 100,
-            ),
+            fighter.image.startsWith('assets')
+                ? Image.asset(
+                    fighter.image,
+                    height: 100,
+                    width: 100,
+                  )
+                : Image.file(
+                    File(fighter.image),
+                    height: 100,
+                    width: 100,
+                  ),
             Text(
               fighter.name,
               style: const TextStyle(
@@ -50,7 +58,8 @@ class FighterCard extends StatelessWidget {
               alignment: WrapAlignment.center,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                ...fighter.getStatsList()
+                ...fighter
+                    .getStatsList()
                     .map((entry) {
                       return [
                         entry.statModel.icon,

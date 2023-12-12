@@ -84,8 +84,44 @@ class CreateFighterScreen extends StatelessWidget {
                         print(formValues);
 
                         // Create a new fighter
+                        FighterModel fighter = FighterModel(
+                          name: formValues['name'],
+                          description: formValues['description'],
+                          image: formValues['image'],
+                          category: formValues['category'],
+                          stats: FighterStats(
+                            strength: FighterStat(
+                                statModel: stats.firstWhere(
+                                    (element) => element.name == 'Strength'),
+                                value: formValues['strength'].toInt()),
+                            health: FighterStat(
+                                statModel: stats.firstWhere(
+                                    (element) => element.name == 'Health'),
+                                value: formValues['health'].toInt()),
+                            speed: FighterStat(
+                                statModel: stats.firstWhere(
+                                    (element) => element.name == 'Speed'),
+                                value: formValues['speed'].toInt()),
+                            crit: FighterStat(
+                                statModel: stats.firstWhere(
+                                    (element) => element.name == 'Crit'),
+                                value: formValues['crit'].toInt()),
+                            dodge: FighterStat(
+                                statModel: stats.firstWhere(
+                                    (element) => element.name == 'Dodge'),
+                                value: formValues['dodge'].toInt()),
+                            defense: FighterStat(
+                                statModel: stats.firstWhere(
+                                    (element) => element.name == 'Defense'),
+                                value: formValues['defense'].toInt()),
+                          ),
+                        );
 
-                        // First create a
+                        // Add the fighter to the list of fighters
+                        FighterModel.addFighter(fighter);
+
+                        // Go back to the previous screen
+                        Navigator.pop(context);
                       },
                       child: const Text('Create Fighter'),
                     ),
