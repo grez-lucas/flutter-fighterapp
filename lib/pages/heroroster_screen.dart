@@ -19,7 +19,6 @@ class _HeroRosterScreenState extends State<HeroRosterScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _getFighters();
   }
@@ -41,6 +40,7 @@ class _HeroRosterScreenState extends State<HeroRosterScreen> {
               itemCount: fighters.length),
         ),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.purple[600],
           onPressed: () {
             Navigator.pushNamed(context, '/createfighter');
           },
